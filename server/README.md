@@ -6,6 +6,7 @@
 
 ```
     curl localhost:3000/health
+    curl localhost:3000/logger
 ```
 
 - GET /todos

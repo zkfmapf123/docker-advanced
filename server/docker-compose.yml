@@ -20,6 +20,10 @@ services:
       - mysql
     networks:
       - todo-network
+    logging:
+      options:
+        max-size: 5k
+        max-file: '3'
 
   mysql:
     image: mysql:latest
