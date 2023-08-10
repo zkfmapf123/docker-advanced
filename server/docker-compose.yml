@@ -15,9 +15,11 @@ services:
       - DB_PASSWORD=1234
       - DB_NAME=todomini
     volumes:
-      - ${PWD}/logs:/logs
+      - ${PWD}/outlogs:/usr/src/app/logs
     depends_on:
       - mysql
+    networks:
+      - todo-network
 
   mysql:
     image: mysql:latest
@@ -26,3 +28,9 @@ services:
       - MYSQL_DATABASE=todomini
     ports:
       - '3306:3306'
+    networks:
+      - todo-network
+
+networks:
+  todo-network:
+    driver: bridge
