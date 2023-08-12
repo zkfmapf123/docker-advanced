@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  ## apiserver
+  apiserver:
+    build:
+      context: server/
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - DB_PORT=3306
+      - DB_HOST=todo-db
+      - DB_USER=root
+      - DB_PASSWORD=1234
+      - DB_NAME=todomini
+    # volumes:
+    #   - ${PWD}/logs:/usr/src/app/logs
+    logging:
+      driver: 'fluentd'
+      options:
+        fluentd-address: localhost:24224
+        tag: 'apiserver.logs apiserver.error apiserver.info'
+    depends_on:
+      - todo-db
+      - fluentd
+    networks:
+      - common-bridge
+
+  ## Fluentd
+  fluentd:
+    build:
+      context: fluentd/
+    ports:
+      - '24224:24224'
+      - '24224:24224/udp'
+    links:
+      - 'elasticsearch'
+    volumes:
+      - ${PWD}/fluentd/conf:/fluentd/etc
+    networks:
+      - common-bridge
+
+  ## Mysql
+  todo-db:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=todomini
+    ports:
+      - '3306:3306'
+    networks:
+      - common-bridge
+
+  ## Elasticsearch
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.0
+    environment:
+      - discovery.type=single-node
+    ports:
+      - '9200:9200'
+    networks:
+      - common-bridge
+
+  ## Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.15.0
+    ports:
+      - '5601:5601'
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - common-bridge
+
+networks:
+  common-bridge:
+    driver: bridge

@@ -11,6 +11,8 @@
 
     ## --log-opt max-size=5k 단일 로그 파일의 최대크기를 5kb
     ## --log-opt max-file=3 파일을 3개로 유지
+
+    docker-compose up --build
 ```
 
 ## 2. Log Forwarding use Fluentd
@@ -18,5 +20,9 @@
 ![fluentd](./public/fluentd.png)
 
 ```
-
+    docker-compose -f docker-compose.archiving.yaml up --build
 ```
+
+## Reference
+
+- <a href="https://docs.fluentd.org/container-deployment/docker-compose"> Fluentd Document </a>
