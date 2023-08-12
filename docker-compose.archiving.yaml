@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   ## apiserver
@@ -67,8 +67,8 @@ services:
     image: docker.elastic.co/kibana/kibana:7.15.0
     ports:
       - '5601:5601'
-    environment:
-      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    links:
+      - elasticsearch
     networks:
       - common-bridge
 

@@ -21,6 +21,9 @@
 
 ```
     docker-compose -f docker-compose.archiving.yaml up --build
+
+    // apiserver는 다시 Restart 해야 함
+    // locahost:5601 -> Analytics -> Discorver
 ```
 
 ## Reference
